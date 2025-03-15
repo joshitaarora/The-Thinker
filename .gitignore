@@ -1,0 +1,41 @@
+# Ignore large files, virtual environments, and unnecessary logs
+
+# Virtual environments
+venv/
+.env/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Data files (large datasets should not be committed)
+src/data/raw_data_code_search_net/
+src/data/raw_data_codes/
+*.csv
+*.json
+*.zip
+
+# Model checkpoints and embeddings
+models/
+*.h5
+*.pt
+*.ckpt
+*.pkl
+
+# Logs and debugging files
+logs/
+*.log
+*.out
+
+# IDE and OS-specific files
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
