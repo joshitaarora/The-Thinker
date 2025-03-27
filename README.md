@@ -33,6 +33,9 @@ The-Thinker is a machine learning research project focused on leveraging LLMs fo
 pip install -r requirements.txt
 ```
 
+Create .env from .env.sample and fill in the necessary values.
+
+
 ## Usage
 1. **Prepare the data** (Follow [Data README](src/data/README.md) for downloading datasets)
    ```sh
