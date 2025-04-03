@@ -22,3 +22,20 @@ def embed_text(text: str | list[str]):
     embeddings = normalize(embeddings, axis=1)
 
     return embeddings
+
+
+
+
+def create_embeddings(dataset, limit=None):
+
+    if dataset == "codesearchnet":
+        pass
+        
+    elif dataset == "codesc":
+        pass
+    else:
+        raise ValueError("Dataset not supported")  
+
+    
+
+    return chunks

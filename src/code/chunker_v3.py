@@ -1,15 +1,23 @@
 from typing import List, Optional
-
 from llama_index.core.readers.file.base import SimpleDirectoryReader
 from llama_index.core.text_splitter import CodeSplitter
 from llama_index.packs.code_hierarchy import CodeHierarchyNodeParser
 
+# Language to file extension mapping
+LANGUAGE_EXTENSIONS = {
+    "python": [".py"],
+    "java": [".java"],
+    "javascript": [".js", ".jsx"],
+    "go": [".go"],
+    "ruby": [".rb"],
+    "php": [".php"]
+}
 
 def parse_codebase_into_chunks(
     repo_path: str,
     language: str = "python",
-    max_chars: int = 1000,
-    chunk_lines: int = 10,
+    max_chars: int = 10000,
+    chunk_lines: int = 150,
 ) -> List:
     """
     Parses a local code repository into structured, hierarchical code chunks.
@@ -23,10 +31,14 @@ def parse_codebase_into_chunks(
     Returns:
         List[BaseNode]: List of structured code chunks.
     """
+    required_exts = LANGUAGE_EXTENSIONS.get(language.lower())
+    if not required_exts:
+        raise ValueError(f"Unsupported language: {language}")
+
     reader = SimpleDirectoryReader(
         input_dir=repo_path,
         recursive=True,
-        required_exts=[".py"],
+        required_exts=required_exts,
         file_metadata=lambda path: {"filepath": str(path)},
     )
 

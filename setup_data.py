@@ -1,8 +1,8 @@
 import argparse
 
-import dotenv
+from src.data.data_loader import get_data
 
-from src.code.chunker_v3 import parse_codebase_into_chunks
+import dotenv
 
 dotenv.load_dotenv()
 
@@ -49,11 +49,7 @@ def main():
     dataset = args.dataset
     limit = args.limit
     
-    # data = parse_codebase_into_chunks(dataset, limit)
-
-    respp = parse_codebase_into_chunks("src/data/code_search_net_repos/django-fm", "python")
-
-    import pdb; pdb.set_trace()
+    data = get_data(dataset, limit)
 
 
     chunks = []
