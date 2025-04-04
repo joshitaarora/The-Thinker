@@ -10,7 +10,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 def clone_repo(github_url: str, destination_path: str) -> None:
     destination = Path(destination_path)
     if destination.exists():
-        print(f"✅ Repository already exists at {destination}")
+        # print(f"✅ Repository already exists at {destination}")
         return
 
     try:
@@ -25,18 +25,23 @@ def clone_repo(github_url: str, destination_path: str) -> None:
         if result.returncode != 0:
             stderr_output = result.stderr.decode("utf-8", errors="ignore")
             if "Username for" in stderr_output or "password" in stderr_output.lower():
-                print(f"⏭️ Skipped private/auth-required repo: {github_url}")
+                pass
+                # print(f"⏭️ Skipped private/auth-required repo: {github_url}")
             else:
-                print(
-                    f"❌ Clone failed for {github_url}: {stderr_output.strip().splitlines()[-1]}"
-                )
+                pass
+                # print(
+                #     f"❌ Clone failed for {github_url}: {stderr_output.strip().splitlines()[-1]}"
+                # )
         else:
-            print(f"✅ Cloned: {github_url}")
+            # print(f"✅ Cloned: {github_url}")
+            pass
 
     except subprocess.TimeoutExpired:
-        print(f"⏱️ Timeout while cloning: {github_url}")
+        # print(f"⏱️ Timeout while cloning: {github_url}")
+        pass
     except Exception as e:
-        print(f"⚠️ Unexpected error while cloning {github_url}: {e}")
+        # print(f"⚠️ Unexpected error while cloning {github_url}: {e}")
+        pass
 
 
 def count_total_entries(
@@ -106,7 +111,8 @@ def get_data(
     dataset: str,
     limit: Optional[int] = None,
     clone_parallel: bool = True,
-    batch_size: int = 500,
+    languages: Optional[List[str]] = None,
+    batch_size: int = 50,
     max_workers: int = 8,
 ):
     if dataset == "codesearchnet":
@@ -117,16 +123,19 @@ def get_data(
         clone_base_path = "src/data/code_search_net_repos"
         Path(clone_base_path).mkdir(parents=True, exist_ok=True)
 
-        total_entries = count_total_entries(base_dir)
-        stream = stream_codesearchnet_data(base_dir)
-        pbar = tqdm(total=total_entries, desc="Processing unique repos")
+        # total_entries = count_total_entries(base_dir)
+        stream = stream_codesearchnet_data(base_dir, languages)
+        # pbar = tqdm(total=total_entries, desc="Processing unique repos")
 
-        for entry in stream:
+        for i, entry in tqdm(enumerate(stream), total=450000):
+            if i+1 % 10000 == 0:
+                print(f"Processed {i+1} entries")
+
             repo = entry["repo"]
             if repo not in unique_repos:
                 unique_repos.add(repo)
                 batch.append(entry)
-                pbar.update(1)
+                # pbar.update(1)
 
                 if len(batch) == batch_size:
                     if clone_parallel:
@@ -162,7 +171,7 @@ def get_data(
                     _clone_repo_entry(e, clone_base_path)
             data.extend(batch)
 
-        pbar.close()
+        # pbar.close()
         return data
 
     elif dataset == "codesc":
