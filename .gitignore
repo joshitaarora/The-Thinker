@@ -4,6 +4,8 @@
 venv/
 .env/
 
+.env
+
 # Python cache files
 __pycache__/
 *.pyc
@@ -13,6 +15,7 @@ __pycache__/
 # Data files (large datasets should not be committed)
 src/data/raw_data_code_search_net/
 src/data/raw_data_codes/
+src/data/code_search_net_repos/
 *.csv
 *.json
 *.zip

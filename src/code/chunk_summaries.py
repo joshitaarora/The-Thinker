@@ -20,13 +20,15 @@ def summarize_code_llama(code_chunk):
     return summary.strip()
 
 
-code = """
-def get_user_by_id(user_id):
-    return db.query(User).filter(User.id == user_id).first()
-"""
+if __name__ == "__main__":
+
+    code = """
+    def get_user_by_id(user_id):
+        return db.query(User).filter(User.id == user_id).first()
+    """
 
 
-print("🔍 Code:")
-print(code.strip())
-print("\n📝 Summary:")
-print(summarize_code_llama(code))
+    print("🔍 Code:")
+    print(code.strip())
+    print("\n📝 Summary:")
+    print(summarize_code_llama(code))
