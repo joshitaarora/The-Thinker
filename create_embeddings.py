@@ -49,16 +49,7 @@ def main():
     dataset = args.dataset
     limit = args.limit
     
-    # data = parse_codebase_into_chunks(dataset, limit)
-
-    respp = parse_codebase_into_chunks("src/data/code_search_net_repos/django-fm", "python")
-
-    import pdb; pdb.set_trace()
-
-
-    chunks = []
-
-
+    create_embeddings("codesearchnet", ['python'])
 
 if __name__ == "__main__":
     main()

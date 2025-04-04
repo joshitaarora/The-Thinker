@@ -52,9 +52,6 @@ def main():
     data = get_data(dataset, limit)
 
 
-    chunks = []
-
-
 
 if __name__ == "__main__":
     main()
