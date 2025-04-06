@@ -2,7 +2,7 @@ import argparse
 
 import dotenv
 
-from src.code.chunker_v3 import create_embeddings
+from src.code.chunker_v3 import create_embeddings_naive
 
 dotenv.load_dotenv()
 
@@ -49,7 +49,7 @@ def main():
     dataset = args.dataset
     limit = args.limit
     
-    create_embeddings("codesearchnet", ['python'], limit=20)
+    create_embeddings_naive("codesearchnet", ['python'], limit=20)
 
 if __name__ == "__main__":
     main()
