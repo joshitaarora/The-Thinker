@@ -11,7 +11,7 @@ from llama_index.packs.code_hierarchy import CodeHierarchyNodeParser
 from src.data.data_loader import stream_codesearchnet_data
 from src.code.vector_db import init_milvus_collection, get_client
 from src.code.chunk_summaries import summarize_code_llama
-from src.code.embedder import embed_text
+
 
 
 # Language to file extension mapping
@@ -44,13 +44,23 @@ def parse_codebase_into_chunks(
     if not required_exts:
         raise ValueError(f"Unsupported language: {language}")
 
-    reader = SimpleDirectoryReader(
-        input_dir=repo_path,
-        recursive=True,
-        required_exts=required_exts,
-        file_metadata=lambda path: {"filepath": str(path)},
-    )
+    if os.path.isfile(repo_path):
+        reader = SimpleDirectoryReader(
+            input_files=[x.strip() for x in repo_path.split(',')],
+            recursive=True,
+            required_exts=required_exts,
+            file_metadata=lambda path: {"filepath": str(path)},
+        )
+    else:
+        reader = SimpleDirectoryReader(
+            input_dir=repo_path,
+            recursive=True,
+            required_exts=required_exts,
+            file_metadata=lambda path: {"filepath": str(path)},
+        )
     documents = reader.load_data()
+
+    print(f"Total documents (files): {len(documents)}")
 
     code_splitter = CodeSplitter(language=language, max_chars=max_chars, chunk_lines=chunk_lines)
     node_parser = CodeHierarchyNodeParser(language=language, code_splitter=code_splitter)
@@ -139,6 +149,7 @@ def process_repo_chunks(entry):
     for node in nodes:
         try:
             summary = summarize_code_llama(node.text)
+            from src.code.embedder import embed_text
             embedding = embed_text(summary)[0]
 
             metadata = node.metadata
@@ -174,6 +185,7 @@ def process_repo_chunks_naive(entry):
     for node in nodes:
         try:
             summary = node.text
+            from src.code.embedder import embed_text
             embedding = embed_text(node.text)[0]
 
             metadata = node.metadata

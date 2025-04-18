@@ -10,7 +10,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 def clone_repo(github_url: str, destination_path: str) -> None:
     destination = Path(destination_path)
     if destination.exists():
-        # print(f"✅ Repository already exists at {destination}")
+        print(f"✅ Repository already exists at {destination}")
         return
 
     try:
@@ -26,21 +26,21 @@ def clone_repo(github_url: str, destination_path: str) -> None:
             stderr_output = result.stderr.decode("utf-8", errors="ignore")
             if "Username for" in stderr_output or "password" in stderr_output.lower():
                 pass
-                # print(f"⏭️ Skipped private/auth-required repo: {github_url}")
+                print(f"⏭️ Skipped private/auth-required repo: {github_url}")
             else:
                 pass
-                # print(
-                #     f"❌ Clone failed for {github_url}: {stderr_output.strip().splitlines()[-1]}"
-                # )
+                print(
+                    f"❌ Clone failed for {github_url}: {stderr_output.strip().splitlines()[-1]}"
+                )
         else:
-            # print(f"✅ Cloned: {github_url}")
+            print(f"✅ Cloned: {github_url}")
             pass
 
     except subprocess.TimeoutExpired:
-        # print(f"⏱️ Timeout while cloning: {github_url}")
+        print(f"⏱️ Timeout while cloning: {github_url}")
         pass
     except Exception as e:
-        # print(f"⚠️ Unexpected error while cloning {github_url}: {e}")
+        print(f"⚠️ Unexpected error while cloning {github_url}: {e}")
         pass
 
 
