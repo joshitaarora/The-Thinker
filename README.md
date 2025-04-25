@@ -1,73 +1,136 @@
-# The-Thinker
+# The Thinker
 
-The-Thinker is a machine learning research project focused on leveraging LLMs for code understanding, summarization, and embedding-based retrieval.
+**The Thinker** is a retrieval-augmented generation (RAG) system designed for understanding and querying large-scale code repositories using abstract syntax trees (ASTs), smart chunking, and embedding-based retrieval with Milvus.
 
-## Features
-- **Chunking Code Repositories**: Processes repositories into structured chunks.
-- **Summarization with LLMs**: Generates summaries of code snippets.
-- **Embeddings & Vector DB**: Stores and queries code representations.
-- **Data Standardization**: Unifies datasets into a common format.
+---
 
-## Project Structure
-```
-- src
-    - data
-        - README.md  # How to download datasets (data is not included in commits)
-        - raw_data_code_search_net/  # Placeholder for dataset 1
-        - raw_data_codes/  # Placeholder for dataset 2
-        - unifier/  # Standardizes datasets (TODO: Define format)
-    - code
-        - chunker.py  # Splits repositories into chunks
-        - chunk_summaries.py  # Generates LLM-based summaries
-        - embedder.py  # Creates embeddings for chunked code
-        - vector_db.py  # Stores and retrieves embeddings
-- prepare.py  # Prepares data (setup, preprocessing)
-- run.py  # Runs the end-to-end pipeline
-- test.py  # Unit tests for modules
-- generate_test_cases.py  # Creates test cases for validation
-- generate_documentation.py  # Automates documentation generation
+## 📝 Description
+
+This paper presents **"The Thinker"**, a novel approach to building knowledge bases for code repositories using Abstract Syntax Trees (ASTs). Traditional code chunking methods treat code as linear text, fragmenting it arbitrarily and losing semantic relationships. Our AST-based approach preserves code structure and contextual boundaries, generating more meaningful embeddings for vector-based search powering semantic code search, which aligns with the goals of the CodeSearchNet Challenge (Husain et al., 2019).
+
+Using the CodeSearchNet dataset, we demonstrate that AST-based chunking creates semantically coherent units that improve knowledge retrieval compared to traditional chunking methods. Through both manual evaluation and LLM-based assessment (Briggs, 2024), we show that our system consistently provides more relevant and accurate results for code-related queries.
+
+Although the approach is computationally intensive, it offers significant advantages for documentation generation, semantic code search, and code-based chatbots. The Thinker architecture integrates with open-source tools and requires no proprietary dependencies, making it accessible for organizations seeking to improve code understanding and navigation within their repositories.
+
+Our implementation and data processing scripts are available on GitHub.
+
+---
+
+## 📦 Project Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/joshitaarora/The-Thinker.git
+cd The-Thinker
 ```
 
-## Installation
-```sh
+### 2. Create a virtual environment and activate it
+
+```bash
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+### 3. Install dependencies
+
+```bash
 pip install -r requirements.txt
 ```
 
-Create .env from .env.sample and fill in the necessary values.
+### 4. Setup environment variables
 
+```bash
+cp .env.sample .env
+# Edit .env to include your OpenAI API key or other necessary variables
+```
 
-## Usage
-1. **Prepare the data** (Follow [Data README](src/data/README.md) for downloading datasets)
-   ```sh
-   python prepare.py
-   ```
-2. **Run the full pipeline**
-   ```sh
-   python run.py
-   ```
-3. **Run tests**
-   ```sh
-   python test.py
-   ```
+---
 
-## Data Handling
-Large datasets are not included in the repository. Follow the instructions in [`src/data/README.md`](https://github.com/joshitaarora/The-Thinker/blob/main/src/data/README.md) to download the necessary files.
+## 🚀 Running the Project
 
-## Contribution Guidelines
+### Step 1: Clone Dataset Repository
+
+Download and prepare the [CodeSearchNet Challenge](https://github.com/github/CodeSearchNet) dataset:
+
+```bash
+python3 setup_data.py --dataset codesearchnet
+```
+
+This will download and clone all repositories with `depth == 1`.
+
+---
+
+### Step 2: Create Code Chunks
+
+Smart or naive chunking of a specific repository:
+
+```bash
+python3 create_chunks.py --repo-path ./src/data/selected_repos/tensorflow --mode smart
+```
+
+- Replace the path with any repo directory you want.
+- `--mode` can be `smart` or `naive`.
+
+---
+
+### Step 3: Generate Summaries, Embeddings, and Store in Milvus
+
+Ensure Milvus is installed and running locally.
+
+Then run:
+
+```bash
+# For naive chunking:
+python3 create_embeddings_naive.py --dataset codesearchnet
+
+# For smart chunking:
+python3 create_embeddings.py --dataset codesearchnet
+```
+
+---
+
+### Step 4: Query Using CLI Chatbot
+
+Run the CLI-based chatbot for querying your indexed codebase:
+
+```bash
+python3 query.py --mode naive "Give me detailed logic of locate method?"
+```
+
+You can also use:
+
+```bash
+python3 query.py --mode smart "How is the backpropagation implemented?"
+```
+
+---
+
+### Step 5: Run Analysis on Selected Repositories
+
+For experiments and scoring comparisons:
+
+```bash
+python3 run_selected_experiment_scoring_combined.py
+```
+
+---
+
+## 🤝 Contribution Guidelines
+
 - **Branching**: Always work on a separate branch (never push directly to `master`).
 - **Pull Requests**: All changes must go through PRs and be reviewed.
 - **Code Style**: Follow PEP8 and maintain modularity.
 - **Issues**: Report bugs and suggest improvements via GitHub Issues.
 
-## Roadmap
+---
+
+## 🗺️ Roadmap
+
 - Define a standardized data format for unification.
 - Improve chunking strategies for better summarization.
 - Optimize vector search efficiency.
 
 ---
+
 **Repository:** [GitHub - The-Thinker](https://github.com/joshitaarora/The-Thinker)
-
-**Maintainer:** Daniyal
-
-For any queries, open an issue or reach out via GitHub Discussions.
-
