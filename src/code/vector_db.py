@@ -7,12 +7,12 @@ import uuid
 
 load_dotenv()
 
-client = MilvusClient(
+#client = MilvusClient(
     # uri=os.environ.get("MILVUS_SERVER"),
     # token=os.environ.get("MILVUS_TOKEN")
     # uri="http://0.0.0.0:2379"
     # "./milvus_demo.db"
-)
+#)
 
 from pymilvus import CollectionSchema, FieldSchema, DataType
 

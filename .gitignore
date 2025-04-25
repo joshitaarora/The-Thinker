@@ -1,10 +1,10 @@
 # Ignore large files, virtual environments, and unnecessary logs
 
 # Virtual environments
-venv/
-.env/
+# venv/
+# .env/
 
-.env
+# .env
 
 # Python cache files
 __pycache__/

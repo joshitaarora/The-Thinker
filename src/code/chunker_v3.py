@@ -85,7 +85,7 @@ LANGUAGE_EXTENSIONS = {
 }
 
 def parse_codebase_into_chunks_naive(
-    repo_path: str, language: str = "python", chunk_size: int = 256, chunk_overlap: int = 20
+    repo_path: str, language: str = "python", chunk_size: int = 512, chunk_overlap: int = 20
 ) -> List[BaseNode]:
     """
     Parses a local code repository into structured code chunks using sentence-level chunking.
